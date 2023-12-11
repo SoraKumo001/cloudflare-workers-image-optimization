@@ -35,10 +35,9 @@ export default {
 
 ## Deploy
 
-````sh
 ```sh
 wrangler deploy
-````
+```
 
 ## Setting of Next.js
 
