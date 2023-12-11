@@ -1,3 +1,8 @@
+# cloudflare-workers-image-optimization
+
+Deploy the following code to Cloudflare Workers to receive requests for next/image in Next.js
+
+```ts
 import { optimizeImage } from 'wasm-image-optimization';
 export interface Env {}
 
@@ -26,3 +31,29 @@ const handleRequest = async (request: Request, _env: Env, _ctx: ExecutionContext
 export default {
 	fetch: handleRequest,
 };
+```
+
+## Deploy
+
+````sh
+```sh
+wrangler deploy
+````
+
+## Setting of Next.js
+
+To direct Next.js image optimization requests to Cloudflare Workers, set the following
+
+- next.config.js
+
+```js
+/**
+ * @type { import("next").NextConfig}
+ */
+const config = {
+	images: {
+		path: 'https://xxx.yyy.workers.dev/',
+	},
+};
+export default config;
+```
