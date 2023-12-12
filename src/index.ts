@@ -1,7 +1,13 @@
 import { optimizeImage } from 'wasm-image-optimization';
 export interface Env {}
 
-const handleRequest = async (request: Request, _env: Env, _ctx: ExecutionContext): Promise<Response> => {
+const handleRequest = async (request: Request, _env: Env, ctx: ExecutionContext): Promise<Response> => {
+	const cache = caches.default;
+	const cachedResponse = await cache.match(request);
+	if (cachedResponse) {
+		return cachedResponse;
+	}
+
 	const params = new URL(request.url).searchParams;
 	const url = params.get('url');
 	if (!url) {
@@ -15,12 +21,14 @@ const handleRequest = async (request: Request, _env: Env, _ctx: ExecutionContext
 		width: width ? parseInt(width) : undefined,
 		quality: quality ? parseInt(quality) : undefined,
 	});
-	return new Response(image, {
+	const response = new Response(image, {
 		headers: {
 			'Content-Type': 'image/webp',
 			'Cache-Control': 'public, max-age=31536000, immutable',
 		},
 	});
+	ctx.waitUntil(cache.put(request, response.clone()));
+	return response;
 };
 
 export default {
