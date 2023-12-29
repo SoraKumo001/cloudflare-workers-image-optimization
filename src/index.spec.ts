@@ -9,6 +9,7 @@ describe('Wrangler', () => {
 	const property = beforeAllAsync(async () => {
 		const worker = await unstable_dev('./src/index.ts', {
 			experimental: { disableExperimentalWarning: true },
+			ip: '127.0.0.1',
 		});
 		const time = Date.now();
 		return { worker, time };
