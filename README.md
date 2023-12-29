@@ -6,21 +6,38 @@ Deploy the following code to Cloudflare Workers to receive requests for next/ima
 import { optimizeImage } from 'wasm-image-optimization';
 export interface Env {}
 
+const isValidUrl = (url: string) => {
+	try {
+		new URL(url);
+		return true;
+	} catch (err) {
+		return false;
+	}
+};
+
 const handleRequest = async (request: Request, _env: Env, ctx: ExecutionContext): Promise<Response> => {
+	const url = new URL(request.url);
+	const params = url.searchParams;
+	const imageUrl = params.get('url');
+	if (!imageUrl || !isValidUrl(imageUrl)) {
+		return new Response('url is required', { status: 400 });
+	}
 	const cache = caches.default;
-	const cachedResponse = await cache.match(request);
+	const cachedResponse = await cache.match(new Request(url.toString(), request));
 	if (cachedResponse) {
 		return cachedResponse;
 	}
 
-	const params = new URL(request.url).searchParams;
-	const url = params.get('url');
-	if (!url) {
-		return new Response('url is required', { status: 400 });
-	}
 	const width = params.get('w');
 	const quality = params.get('q');
-	const srcImage = await fetch(url).then((res) => res.arrayBuffer());
+
+	const srcImage = await fetch(imageUrl, { cf: { cacheKey: imageUrl } })
+		.then((res) => (res.ok ? res.arrayBuffer() : null))
+		.catch((e) => null);
+
+	if (!srcImage) {
+		return new Response('image not found', { status: 404 });
+	}
 	const image = await optimizeImage({
 		image: srcImage,
 		width: width ? parseInt(width) : undefined,
