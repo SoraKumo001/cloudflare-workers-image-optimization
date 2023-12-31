@@ -13,8 +13,8 @@
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20231218.0",
 		"@types/jest": "^29.5.11",
-		"@typescript-eslint/eslint-plugin": "^6.15.0",
-		"@typescript-eslint/parser": "^6.15.0",
+		"@typescript-eslint/eslint-plugin": "^6.16.0",
+		"@typescript-eslint/parser": "^6.16.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-import": "^2.29.1",
@@ -28,7 +28,7 @@
 		"wrangler": "^3.22.1"
 	},
 	"dependencies": {
-		"wasm-image-optimization": "^0.1.0"
+		"wasm-image-optimization": "^0.1.1"
 	},
 	"main": "index.js",
 	"repository": "https://github.com/SoraKumo001/cloudflare-workers-image-optimization",
