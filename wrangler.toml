@@ -1,4 +1,4 @@
-name = "cloudflare-workers"
+name = "cloudflare-image"
 main = "src/index.ts"
 compatibility_date = "2023-12-29"
 
