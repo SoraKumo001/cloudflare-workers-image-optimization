@@ -10,10 +10,10 @@
 		"test": "jest"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20240129.0",
+		"@cloudflare/workers-types": "^4.20240208.0",
 		"@types/jest": "^29.5.12",
-		"@typescript-eslint/eslint-plugin": "^6.20.0",
-		"@typescript-eslint/parser": "^6.20.0",
+		"@typescript-eslint/eslint-plugin": "^7.0.1",
+		"@typescript-eslint/parser": "^7.0.1",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-import": "^2.29.1",
@@ -24,10 +24,10 @@
 		"ts-jest": "^29.1.2",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3",
-		"wrangler": "^3.26.0"
+		"wrangler": "^3.28.3"
 	},
 	"dependencies": {
-		"wasm-image-optimization": "0.3.0"
+		"wasm-image-optimization": "1.0.0"
 	},
 	"main": "index.js",
 	"repository": "https://github.com/SoraKumo001/cloudflare-workers-image-optimization",
