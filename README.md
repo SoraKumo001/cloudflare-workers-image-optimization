@@ -14,24 +14,35 @@ const isValidUrl = (url: string) => {
 	}
 };
 
-const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext): Promise<Response> => {
-	const accept = request.headers.get('accept');
-	const isWebp =
+const isType = (accept: string | null, type: string) => {
+	return (
 		accept
 			?.split(',')
 			.map((format) => format.trim())
-			.some((format) => ['image/webp', '*/*', 'image/*'].includes(format)) ?? true;
+			.some((format) => [`image/${type}`, '*/*', 'image/*'].includes(format)) ?? true
+	);
+};
 
+const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext): Promise<Response> => {
 	const url = new URL(request.url);
-
 	const params = url.searchParams;
+	const type = ['avif', 'webp', 'png', 'jpeg'].find((v) => v === params.get('type')) as 'avif' | 'webp' | 'png' | 'jpeg' | undefined;
+	const accept = request.headers.get('accept');
+	const isAvif = isType(accept, 'avif');
+	const isWebp = isType(accept, 'webp');
+
+	const cache = await caches.open(`image-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
+
+	const cached = await cache.match(request);
+	if (cached) {
+		return cached;
+	}
+
 	const imageUrl = params.get('url');
 	if (!imageUrl || !isValidUrl(imageUrl)) {
 		return new Response('url is required', { status: 400 });
 	}
 
-	const cache = caches.default;
-	url.searchParams.append('webp', isWebp.toString());
 	const cacheKey = new Request(url.toString());
 	const cachedResponse = await cache.match(cacheKey);
 	if (cachedResponse) {
@@ -60,7 +71,7 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 		return response;
 	}
 
-	const format = isWebp ? 'webp' : contentType === 'image/jpeg' ? 'jpeg' : 'png';
+	const format = type ?? (isAvif ? 'avif' : isWebp ? 'webp' : contentType === 'image/jpeg' ? 'jpeg' : 'png');
 	const image = await optimizeImage({
 		image: srcImage,
 		width: width ? parseInt(width) : undefined,
