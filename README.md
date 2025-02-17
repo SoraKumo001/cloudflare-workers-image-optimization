@@ -31,7 +31,7 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 	const isAvif = isType(accept, 'avif');
 	const isWebp = isType(accept, 'webp');
 
-	const cache = await caches.open(`image-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
+	const cache = await caches.open(`img-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
 
 	const cached = await cache.match(request);
 	if (cached) {

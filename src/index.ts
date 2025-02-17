@@ -26,10 +26,10 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 	const isAvif = isType(accept, 'avif');
 	const isWebp = isType(accept, 'webp');
 
-	const cache = await caches.open(`image-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
+	const cache = await caches.open(`img-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
 
 	const cached = await cache.match(request);
-	if (cached) {
+	if (cached && cached.ok) {
 		return cached;
 	}
 
@@ -69,8 +69,8 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 	const format = type ?? (isAvif ? 'avif' : isWebp ? 'webp' : contentType === 'image/jpeg' ? 'jpeg' : 'png');
 	const image = await optimizeImage({
 		image: srcImage,
-		width: width ? parseInt(width) : undefined,
-		quality: quality ? parseInt(quality) : undefined,
+		width: width ? Number(width) : undefined,
+		quality: quality ? Number(quality) : undefined,
 		format,
 	});
 	const response = new Response(image, {
