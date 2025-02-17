@@ -68,7 +68,7 @@ describe('Wrangler', () => {
 	});
 	test('not webp(cache)', async () => {
 		const { worker, time } = await property;
-		await new Promise((resolve) => setTimeout(resolve, 10));
+		await new Promise((resolve) => setTimeout(resolve, 100));
 		const types = ['png', 'jpeg', 'png', 'gif'];
 		for (let i = 0; i < images.length; i++) {
 			const url = imageUrl(images[i]);
