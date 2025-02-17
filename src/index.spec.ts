@@ -68,12 +68,16 @@ describe('Wrangler', () => {
 	});
 	test('not webp(cache)', async () => {
 		const { worker, time } = await property;
+		await new Promise((resolve) => setTimeout(resolve, 10));
 		const types = ['png', 'jpeg', 'png', 'gif'];
 		for (let i = 0; i < images.length; i++) {
 			const url = imageUrl(images[i]);
 			const res = await worker.fetch(`/?url=${encodeURI(url)}&t=${time}`, { headers: { accept: 'image/jpeg,image/png' } });
 			expect(res.status).toBe(200);
-			expect(Object.fromEntries(res.headers.entries())).toMatchObject({ 'content-type': `image/${types[i]}`, 'cf-cache-status': 'HIT' });
+			expect(Object.fromEntries(res.headers.entries())).toMatchObject({
+				'content-type': `image/${types[i]}`,
+				'cf-cache-status': 'HIT',
+			});
 		}
 	});
 });

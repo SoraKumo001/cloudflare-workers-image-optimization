@@ -18,7 +18,7 @@ const isType = (accept: string | null, type: string) => {
 	);
 };
 
-const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext): Promise<Response> => {
+const handleRequest = async (request: Request, _env: object, ctx: ExecutionContext): Promise<Response> => {
 	const url = new URL(request.url);
 	const params = url.searchParams;
 	const type = ['avif', 'webp', 'png', 'jpeg'].find((v) => v === params.get('type')) as 'avif' | 'webp' | 'png' | 'jpeg' | undefined;
