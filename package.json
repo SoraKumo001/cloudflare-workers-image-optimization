@@ -27,7 +27,7 @@
 		"wrangler": "^3.109.1"
 	},
 	"dependencies": {
-		"wasm-image-optimization": "^1.1.3"
+		"wasm-image-optimization": "^1.1.4"
 	},
 	"main": "index.js",
 	"repository": "https://github.com/SoraKumo001/cloudflare-workers-image-optimization",
