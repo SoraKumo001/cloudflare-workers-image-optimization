@@ -28,7 +28,7 @@ jobs:
           lookup-only: true
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
   Lint:
     name: Lint
     needs: Modules
@@ -45,7 +45,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
       - name: Run lint
         run: npm run lint
 
@@ -65,6 +65,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
       - name: test
         run: yarn test
